@@ -14,6 +14,12 @@ from controllers.users_controller import users_bp
 def create_app():
     app = Flask(__name__)
 
+    # A global error catcher for our entire app. Used here for DRY code, rather than adding in individual controllers. 
+    @app.errorhandler(404)
+    def not_found(err):
+        # catch the error 404 a return the html error in JSON format.
+        return {'error': str(err)}, 404
+
     # flask automatically sorts our columns in alphabetical order
     # To get the order we want specified in our schemas we need to do the following to the config
     app.config['JSON_SORT_KEYS'] = False
