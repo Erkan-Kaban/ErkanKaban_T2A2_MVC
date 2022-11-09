@@ -1,3 +1,5 @@
+from init import db, ma
+
 class Exercise_equipment(db.Model):
     __tablename__ = 'exercise_equipments'
     id = db.Column(db.Integer, primary_key=True)

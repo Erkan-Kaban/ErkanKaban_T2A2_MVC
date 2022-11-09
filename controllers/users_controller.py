@@ -14,19 +14,29 @@ from sqlalchemy.exc import IntegrityError
 # It's use is to password hash a password given
 from flask_bcrypt import Bcrypt
 
+# Checking for tokens authentication
+from flask_jwt_extended import jwt_required
+
+# Importing out authentication module from auth controller
+from controllers.auth_controller import authorize
+
 # Creating an instance of bycrypt for Authentication of our flask app.
 bcrypt = Bcrypt()
 
 # Blue print of users with a url prefix of /users/
 users_bp = Blueprint('users', __name__, url_prefix='/users')
 
+
+
+
 # route users lists all the users json, attached route to users_bp blueprint.
 @users_bp.route('/')
 # Checking if user has a bearer JWT token and hasn't expired.
-# @jwt_required()
+@jwt_required()
 def get_all_users():
-    # if not authorize():
-    #     return {'error': 'You must be an admin'}, 401
+    # Authorization added so only admins can view users.
+    authorize()
+        
 
     # Creating a SQL statement that looks up all users from the users table.
     stmt = db.select(User)
@@ -51,7 +61,11 @@ def get_one_user(id):
 
 # Creating a route to delete a user from the database.
 @users_bp.route('/<int:id>/', methods=['DELETE'])
+@jwt_required()
 def delete_user(id):
+    # Authorization added so only admins can delete users.
+    if not authorize():
+        return {'error': 'You must be an admin'}, 401
     stmt = db.select(User).filter_by(id=id)
     user = db.session.scalar(stmt)
     # Checking if user exists with the given id in the route given.
@@ -65,6 +79,7 @@ def delete_user(id):
 
 # Updating the inputted user information with PUT or PATCH methods.
 @users_bp.route('/<int:id>/', methods=['PUT', 'PATCH'])
+@jwt_required()
 def update_user(id):
     stmt = db.select(User).filter_by(id=id)
     user = db.session.scalar(stmt)

@@ -1,4 +1,4 @@
-from main import db
+from init import db, ma
 
 class Muscle_group(db.Model):
     __tablename__ = 'muscle_groups'

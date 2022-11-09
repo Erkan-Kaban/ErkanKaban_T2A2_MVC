@@ -1,3 +1,5 @@
+from init import db, ma
+
 class Logged_workout(db.Model):
     __tablename__ = 'logged_workouts'
     id = db.Column(db.Integer, primary_key=True)

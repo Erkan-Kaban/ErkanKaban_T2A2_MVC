@@ -1,3 +1,5 @@
+from init import db, ma
+
 class User_stat(db.Model):
     __tablename__ = 'user_stats'
     id = db.Column(db.Integer, primary_key=True)

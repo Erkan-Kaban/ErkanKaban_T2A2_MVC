@@ -7,9 +7,10 @@ from init import db, ma, bcrypt, jwt
 # For use for app.config to use our .env file to configuration.
 import os
 
-# Importing blueprint from controllers/users_controller.
+# Importing blueprint from controllers
 from controllers.users_controller import users_bp
 from controllers.auth_controller import auth_bp
+from controllers.cli_controller import db_commands
 
 # Flask will automatically look for create_app and run it.
 def create_app():
@@ -20,6 +21,10 @@ def create_app():
     def not_found(err):
         # catch the error 404 a return the html error in JSON format.
         return {'error': str(err)}, 404
+
+    @app.errorhandler(401)
+    def unauthorized(err):
+        return {'error': str(err)}, 401
 
     # flask automatically sorts our columns in alphabetical order
     # To get the order we want specified in our schemas we need to do the following to the config
@@ -40,5 +45,6 @@ def create_app():
     # Attaches blueprints to Flask application.
     app.register_blueprint(users_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(db_commands)
 
     return app

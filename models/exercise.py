@@ -1,3 +1,5 @@
+from init import db, ma
+
 class Exercise(db.Model):
     __tablename__ = 'exercises'
     id = db.Column(db.Integer, primary_key=True)

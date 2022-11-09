@@ -1,22 +1,12 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, abort
 from init import db, bcrypt
 from datetime import date, timedelta
 from models.user import User, UserSchema
 from sqlalchemy.exc import IntegrityError
-from flask_jwt_extended import create_access_token, get_jwt_identity
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 
 # Blue print of authentication with a url prefix of /users/
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
-
-def authorize():
-    # get the jwt token from the user
-    user_id = get_jwt_identity()
-    # SQL statement that filters the user_id with id's in the user model.
-    stmt = db.select(User).filter_by(id=user_id)
-    # We send this statement into a db.session and save it in user.
-    user = db.session.scalar(stmt)
-    # return user is admin is true or false
-    return user.is_admin
 
 @auth_bp.route('/login/', methods=['POST'])
 def auth_login():
@@ -53,3 +43,16 @@ def auth_register():
         return UserSchema(exclude=['password']).dump(user), 201
     except IntegrityError:
         return {"error" : "Email Address already in use"}, 409 
+
+# Creating a authorization function that can be imported from other modules. 
+# Authorize checks if the user is admin is True, upon registration its default is False.
+def authorize():
+    # get the jwt token from the user
+    user_id = get_jwt_identity()
+    # SQL statement that filters the user_id with id's in the user model.
+    stmt = db.select(User).filter_by(id=user_id)
+    # We send this statement into a db.session and save it in user.
+    user = db.session.scalar(stmt)
+    # return user is admin is true or false
+    if not user.is_admin:
+        abort(401)

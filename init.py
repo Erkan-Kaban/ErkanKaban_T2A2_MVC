@@ -24,3 +24,4 @@ bcrypt = Bcrypt()
 
 # Initializing JWT manager to the Flask Application
 jwt = JWTManager()
+
