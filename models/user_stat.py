@@ -8,6 +8,6 @@ class User_stat(db.Model):
     height = db.Column(db.Integer, nullable=False)
     bmi = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user = db.relationship('User', backref=backref('user_stat', uselist=False))
+    user = db.relationship('User', backref=backref('user_stat', uselist=False), cascade='all, delete')
     
 

@@ -36,15 +36,13 @@ users_bp = Blueprint('users', __name__, url_prefix='/users')
 def get_all_users():
     # Authorization added so only admins can view users.
     authorize()
-        
-
     # Creating a SQL statement that looks up all users from the users table.
     stmt = db.select(User)
     # Inputting the statement into an sqlalchemy to select all user objects and inputting it into users variable.
     users = db.session.scalars(stmt)
     # Returning via many users and marshmallow, serializing through dump for Flask to jsonify users and return.
     # Data in JSON format. 
-    return UserSchema(many=True).dump(users)
+    return UserSchema(many=True, exclude=['password']).dump(users)
 
 
 # Retrieving a specific user from the id number inputted in our end point.

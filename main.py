@@ -11,6 +11,7 @@ import os
 from controllers.users_controller import users_bp
 from controllers.auth_controller import auth_bp
 from controllers.cli_controller import db_commands
+from controllers.exercises_controller import exercises_bp
 
 # Flask will automatically look for create_app and run it.
 def create_app():
@@ -46,5 +47,6 @@ def create_app():
     app.register_blueprint(users_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(db_commands)
+    app.register_blueprint(exercises_bp)
 
     return app

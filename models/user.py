@@ -7,6 +7,7 @@ class User(db.Model):
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
+    # cascade if you delete this user then with cascade all of their logged_workouts also get deleted.
     Logged_workout = db.relationship('Logged_workout', backref='user', cascade='all, delete')
 
 class UserSchema(ma.Schema):
