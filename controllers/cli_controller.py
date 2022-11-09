@@ -6,6 +6,7 @@ from models.user import User
 from models.exercise import Exercise
 from models.muscle_group import Muscle_group
 from models.exercise_equipment import Exercise_equipment
+from models.user_stat import User_stat
 
 
 
