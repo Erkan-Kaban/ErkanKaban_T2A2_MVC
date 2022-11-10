@@ -23,19 +23,31 @@ from controllers.auth_controller import authorize
 # Creating an instance of bycrypt for Authentication of our flask app.
 bcrypt = Bcrypt()
 
-# Blue print of exercises with a url prefix of /exercises
+# Blue print of workouts with a url prefix of /workouts
 logged_workout_bp = Blueprint('logged_workouts', __name__, url_prefix='/workouts')
 
-# route logged_workout_bp lists all the worksouts.
+# route logged_workout_bp lists all the workouts.
 @logged_workout_bp.route('/')
 # Checking if user has a bearer JWT token and hasn't expired.
 @jwt_required()
 def get_all_workouts():
-    # Creating a SQL statement that looks up all workouts from the listed exercise table.
+    # Authorization added so only admins view everyones exercises.
+    authorize()
+    # Creating a SQL statement that looks up all workouts from the listed logged work out table.
     stmt = db.select(Logged_workout)
     print(stmt)
     # Inputting the statement into an sqlalchemy to select all workout objects and inputting it into stmt variable.
     workouts = db.session.scalars(stmt)
-    # Returning via exercises and marshmallow, serializing through dump for Flask to jsonify exercises and return.
+    # Returning via workouts and marshmallow, serializing through dump for Flask to jsonify workouts and return.
     # Data in JSON format. 
     return Logged_workoutSchema(many=True).dump(workouts)
+
+# route logged_workout_bp lists all the workouts.
+@logged_workout_bp.route('/<int:user_id>')
+def get_user_workout(user_id):
+    # Creating a statement that checks for matching user id
+    stmt = db.select(Logged_workout).filter_by(id=user_id)
+    # Placing statement into database to look for the object.
+    logged_workout = db.session.scalar(stmt)
+    print(logged_workout)
+    return Logged_workoutSchema().dump(logged_workout)
