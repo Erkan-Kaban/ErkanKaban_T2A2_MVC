@@ -18,16 +18,13 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import jwt_required
 
 # Importing out authentication module from auth controller
-from controllers.auth_controller import authorize
+from controllers.auth_controller import authorize, authorize_user
 
 # Creating an instance of bycrypt for Authentication of our flask app.
 bcrypt = Bcrypt()
 
 # Blue print of users with a url prefix of /users/
 users_bp = Blueprint('users', __name__, url_prefix='/users')
-
-
-
 
 # route users lists all the users json, attached route to users_bp blueprint.
 @users_bp.route('/')
@@ -47,12 +44,16 @@ def get_all_users():
 
 # Retrieving a specific user from the id number inputted in our end point.
 @users_bp.route('/<int:id>/')
+@jwt_required()
 def get_one_user(id):
+    # Authorization added so only admins can view users.
+    authorize()
     stmt = db.select(User).filter_by(id=id)
     user = db.session.scalar(stmt)
     # Checking if user exists with the given id in the route given.
+    # Exclude password also.
     if user:
-        return UserSchema().dump(user)
+        return UserSchema(exclude=['password']).dump(user)
     else:
         return {'error': f'User not found with the given id {id}'}, 404
 
@@ -62,8 +63,8 @@ def get_one_user(id):
 @jwt_required()
 def delete_user(id):
     # Authorization added so only admins can delete users.
-    if not authorize():
-        return {'error': 'You must be an admin'}, 401
+    authorize()
+    # Creating statement to check User model for the id put into endpoint.    
     stmt = db.select(User).filter_by(id=id)
     user = db.session.scalar(stmt)
     # Checking if user exists with the given id in the route given.
@@ -79,6 +80,8 @@ def delete_user(id):
 @users_bp.route('/<int:id>/', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_user(id):
+    # Authorization checks if the user trying to change details is the user itself.
+    authorize_user(id)
     stmt = db.select(User).filter_by(id=id)
     user = db.session.scalar(stmt)
     # Checking if user exists with the given id in the route given.
@@ -104,7 +107,6 @@ def create_user():
             email = request.json['email'],
             password = bcrypt.generate_password_hash(request.json['password']).decode('utf8'),
         )    
-
         # Add and commit user to DB
         db.session.add(user)
         db.session.commit()

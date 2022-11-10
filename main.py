@@ -15,6 +15,7 @@ from controllers.exercises_controller import exercises_bp
 
 # Flask will automatically look for create_app and run it.
 def create_app():
+    # Creating an instance of Flask and calling the variable name 'app'.
     app = Flask(__name__)
 
     # A global error catcher for our entire app. Used here for DRY code, rather than adding in individual controllers. 
