@@ -41,16 +41,94 @@ def seed_db():
             password = bcrypt.generate_password_hash('123').decode('utf-8'),
             is_admin = True
         ),
+        User(
+            username = 'Admin2',
+            email = 'AdminMaster91@gmail.com',
+            # Decoding hexadecimal has password into utf-8 string format, this string cannot be decrypted
+            password = bcrypt.generate_password_hash('123').decode('utf-8'),
+            is_admin = True
+        ),
+         User(
+            username = 'Berni',
+            email = 'BerniWong@gmail.com',
+            # Decoding hexadecimal has password into utf-8 string format, this string cannot be decrypted
+            password = bcrypt.generate_password_hash('123').decode('utf-8'),
+        ),
+        User(
+            username = 'Kam',
+            email = 'Kam@gmail.com',
+            # Decoding hexadecimal has password into utf-8 string format, this string cannot be decrypted
+            password = bcrypt.generate_password_hash('123').decode('utf-8'),
+        ),
+        User(
+            username = 'Steve',
+            email = 'Steve@gmail.com',
+            # Decoding hexadecimal has password into utf-8 string format, this string cannot be decrypted
+            password = bcrypt.generate_password_hash('123').decode('utf-8'),
+        )
    ]
 
    # Seeding logged_workouts
-   logged_work = Logged_workout(
-        sets = 3,
-        reps = 10,
-        weight = 50,
-        user_id = 1,
-        exercise_id = 1
-   )
+   logged_work = [
+        Logged_workout(
+            sets = 3,
+            reps = 10,
+            weight = 50,
+            user_id = 1,
+            exercise_id = 1
+        ),
+        Logged_workout(
+            sets = 5,
+            reps = 10,
+            weight = 20,
+            user_id = 1,
+            exercise_id = 2
+        ),
+        Logged_workout(
+            sets = 2,
+            reps = 10,
+            weight = 10,
+            user_id = 2,
+            exercise_id = 5
+        ),
+        Logged_workout(
+            sets = 5,
+            reps = 2,
+            weight = 10,
+            user_id = 4,
+            exercise_id = 2
+        ),
+        Logged_workout(
+            sets = 1,
+            reps = 5,
+            weight = 100,
+            user_id = 2,
+            exercise_id = 9
+        ),
+        Logged_workout(
+            sets = 3,
+            reps = 8,
+            weight = 150,
+            user_id = 1,
+            exercise_id = 1
+        ),
+        Logged_workout(
+            sets = 3,
+            reps = 10,
+            weight = 150,
+            user_id = 1,
+            exercise_id = 10
+        ),
+        Logged_workout(
+            sets = 3,
+            reps = 10,
+            weight = 150,
+            user_id = 2,
+            exercise_id = 10
+        )
+        
+        
+   ]
    # Seeding exercises
    exercises = [
         Exercise(
@@ -212,7 +290,7 @@ def seed_db():
         )
    ]
    # session is the current session with the database 
-   db.session.add(logged_work)
+   db.session.add_all(logged_work)
    db.session.add_all(users)
    db.session.add_all(muscle_groups)
    db.session.add_all(exercise_equipments)

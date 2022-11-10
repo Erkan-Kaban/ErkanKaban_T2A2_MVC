@@ -27,6 +27,5 @@ class Logged_workoutSchema(ma.Schema):
     exercise = fields.Nested('ExerciseSchema', only=['name'])
 
    
-
     class Meta:
         fields = ('id', 'sets', 'reps', 'weight', 'user_id', 'exercise_id', 'exercise')
