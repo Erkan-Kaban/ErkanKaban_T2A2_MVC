@@ -64,6 +64,6 @@ def authorize_user(id):
     stmt = db.select(User).filter_by(id=user_id)
     # We send this statement into a db.session and save it in user.
     user = db.session.scalar(stmt)
-    # return user is admin is true or false
+    # checks if the given user id coresponds with the id received from end point.
     if user.id != id:
         abort(401)
