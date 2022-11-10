@@ -8,7 +8,7 @@ class Exercise_equipment(db.Model):
     name = db.Column(db.String(100), nullable=False)
 
     # Relationship with Exercise table.
-    exercises = db.relationship('Exercise', backref='exercise_equipments')
+    exercises = db.relationship('Exercise', back_populates='exercise_equipment')
 
     # Created the coressponding schema for muscle group model.
 class Exercise_equipmentSchema(ma.Schema):

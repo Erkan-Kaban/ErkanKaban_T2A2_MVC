@@ -17,7 +17,7 @@ class Exercise(db.Model):
     exercise_equipment = db.relationship('Exercise_equipment', back_populates='exercises')
 
     # Relationship with logged_workouts and exercises.
-
+    logged_workouts = db.relationship('Logged_workout', back_populates='exercise')
 
 # Created the coresponding schema for the Exercise model.
 class ExerciseSchema(ma.Schema):
