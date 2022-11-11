@@ -634,20 +634,6 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
 
  - `flask.Blueprint`: Used to create shortcuts for endpoints and to have more organised code.
 
-<hr>
-
- The API created will be using a BMI score calculator from a PyPI service called BMI-Score
-
- By importing this package into our API our users that enter their height and body weight into their user stats (optional) we will activate this into the correct format and have a calculated BMI saved into their user stats.
-
- link to the third party package can be found [Here](https://pypi.org/project/BMI-Score/)
-
- Explanation of how it will work:
-- pip install bmi_score
-- import by using: from bmi_score import bmi_information, bmi
-- variable a = bmi(height, body_weight) <--- Saves into a the calculated bmi
-- variable b = bmi_information(a) <-- Returns BMI information based on final BMI score, returns a message to let the user know for example "You're in the healthy weight range"
-- return this information to our user_stats model BMI for each user, to be saved into DB.
  <hr>
 
  ### Requirement 8 Describe your projects models in terms of the relationships they have with each other
