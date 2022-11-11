@@ -68,7 +68,540 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
 
  ### Requirement 5 Document all endpoints for your API
 
- -
+## User routes:
+### `/users/`
+ - Method: GET
+ - Arguments: None
+ - Description: Returns all users
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & Admin Only
+ - Request Body: None
+ - Response Body:
+
+ ```json
+ [
+  {
+    "id": 1,
+    "username": "Adam",
+    "email": "Adam96@gmail.com",
+    "is_admin": false
+  },
+  {
+    "id": 2,
+    "username": "Admin1",
+    "email": "AdminMaster90@gmail.com",
+    "is_admin": true
+  }
+]
+
+ ```
+### `/users/<int:id>/`
+ - Method: GET
+ - Arguments: id
+ - Description: Returns specific user
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & Admin Only
+ - Request Body: None
+ - Response Body:
+
+ ```json
+{
+    "id": 3,
+    "username": "Admin2",
+    "email": "AdminMaster91@gmail.com",
+    "is_admin": true
+}
+ ```
+### `/users/register/`
+ - Method: POST
+ - Arguments: None
+ - Description: Registers user
+ - Authentication: None
+ - Authorization: None
+ - Response Body:
+
+ ```json
+{
+    "id": 7,
+    "username": "George",
+    "email": "Costanza",
+    "is_admin": false
+}
+ ```
+### `/users/<int:id>/`
+ - Method: DELETE
+ - Arguments: id
+ - Description: Deletes user
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & Admin Only
+ - Request Body: None
+ - Response Body:
+
+ ```json
+{
+    "message": "User Admin2 deleted successfully"
+}
+```
+### `/users/<int:id>/`
+ - Method: PUT OR PATCH
+ - Arguments: id
+ - Description: Updates user information
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & User Only
+ - Response Body:
+
+ ```json
+{
+    "id": 1,
+    "username": "Adem",
+    "email": "Adam96@gmail.com",
+    "is_admin": false
+}
+```
+
+## Exercise Routes
+### `/exercises/`
+ - Method: GET
+ - Arguments: None
+ - Description: Gets all exercises in database.
+ - Authentication: @jwt_required()
+ - Authorization: None
+ - Response Body:
+
+ ```json
+
+[
+    {
+        "id": 2,
+        "name": "Plank",
+        "muscle_group_id": 5,
+        "muscle_group": {
+            "name": "Chest"
+        },
+        "exercise_equipment_id": 11,
+        "exercise_equipment": {
+            "name": "None"
+        }
+    },
+    {
+        "id": 3,
+        "name": "Push-up",
+        "muscle_group_id": 5,
+        "muscle_group": {
+            "name": "Chest"
+        },
+        "exercise_equipment_id": 11,
+        "exercise_equipment": {
+            "name": "None"
+        }
+    }
+]
+
+```
+
+### `/exercises/<int:id>/`
+ - Method: DELETE
+ - Arguments: int
+ - Description: Delete selected exercise
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & Admin Only
+ - Response Body:
+
+ ```json
+
+{
+    "message": "Exercise Rear Delt Flys deleted successfully"
+}
+
+```
+
+### `/exercises/<int:id>/`
+ - Method: GET
+ - Arguments: int
+ - Description: Returns selected exercise
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token
+ - Response Body:
+
+ ```json
+
+{
+    "id": 1,
+    "name": "pull-up",
+    "muscle_group_id": 2,
+    "muscle_group": {
+        "name": "Back"
+    },
+    "exercise_equipment_id": 11,
+    "exercise_equipment": {
+        "name": "None"
+    }
+}
+
+```
+
+### `/exercises/add-workout/`
+ - Method: POST
+ - Arguments: None
+ - Description: Creates an exercise
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & Admin Only
+ - Response Body:
+
+ ```json
+
+{
+    "id": 20,
+    "name": "concentrated curls",
+    "muscle_group_id": 1,
+    "muscle_group": {
+        "name": "Biceps"
+    },
+    "exercise_equipment_id": 1,
+    "exercise_equipment": {
+        "name": "Dumbbells"
+    }
+}
+
+```
+
+### `/exercises/<int:id>/`
+ - Method: PUT OR PATCH
+ - Arguments: id
+ - Description: Updates an exercise
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & Admin Only
+ - Response Body:
+
+ ```json
+
+{
+    "id": 1,
+    "name": "pull-up",
+    "muscle_group_id": 2,
+    "muscle_group": {
+        "name": "Back"
+    },
+    "exercise_equipment_id": 11,
+    "exercise_equipment": {
+        "name": "None"
+    }
+}
+
+```
+### `/exercises/muscle-group/<int:muscle>/`
+ - Method: GET
+ - Arguments: muscle
+ - Description: Gets all exercises with matching argument type
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token 
+ - Response Body:
+
+ ```json
+
+[
+    {
+        "id": 13,
+        "name": "Incline Bicep Curls",
+        "muscle_group_id": 1,
+        "muscle_group": {
+            "name": "Biceps"
+        },
+        "exercise_equipment_id": 2,
+        "exercise_equipment": {
+            "name": "Bench"
+        }
+    },
+    {
+        "id": 14,
+        "name": "Hammer Curls",
+        "muscle_group_id": 1,
+        "muscle_group": {
+            "name": "Biceps"
+        },
+        "exercise_equipment_id": 1,
+        "exercise_equipment": {
+            "name": "Dumbbells"
+        }
+    }
+]
+
+```
+
+## Auth Routes
+### `/auth/login/`
+ - Method: POST
+ - Arguments: None
+ - Description: Logs admin or user in with token
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token 
+ - Response Body:
+
+ ```json
+
+{
+    "email": "Adam96@gmail.com",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2ODE0NTgzOCwianRpIjoiOTZlOTEwZGItNGViOS00MTI4LWI5ZjQtOGEwZWFiMGM2NTY0IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE2NjgxNDU4MzgsImV4cCI6MTY2ODIzMjIzOH0.V-g0UZwIr85ETiDUqN-J-E5-N-_0dArx_Op34dDffQk",
+    "is_admin": false
+}
+
+```
+
+## Logged workout routes
+### `/workouts/`
+ - Method: GET
+ - Arguments: None
+ - Description: Gets all workouts from users
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & Admin Only
+ - Response Body:
+
+ ```json
+
+[
+    {
+        "exercise": {
+            "name": "Push-up"
+        },
+        "exercise_id": 1,
+        "reps": 10,
+        "weight": 50,
+        "sets": 3,
+        "id": 1,
+        "user_id": 1
+    },
+    {
+        "exercise": {
+            "name": "Plank"
+        },
+        "exercise_id": 2,
+        "reps": 10,
+        "weight": 20,
+        "sets": 5,
+        "id": 2,
+        "user_id": 1
+    }
+]
+
+```
+
+### `/workouts/user/<int:user_id>/`
+ - Method: GET
+ - Arguments: user_id
+ - Description: Gets matching user_id's workouts
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & User Only
+ - Response Body:
+
+ ```json
+
+[
+    {
+        "exercise": {
+            "name": "Push-up"
+        },
+        "exercise_id": 1,
+        "reps": 10,
+        "weight": 50,
+        "sets": 3,
+        "id": 1,
+        "user_id": 1
+    },
+    {
+        "exercise": {
+            "name": "Plank"
+        },
+        "exercise_id": 2,
+        "reps": 10,
+        "weight": 20,
+        "sets": 5,
+        "id": 2,
+        "user_id": 1
+    }
+]
+
+```
+
+### `/workouts/add/user/<int:user_id>/`
+ - Method: POST
+ - Arguments: user_id
+ - Description: Add's exercise to users workout 
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & User Only
+ - Response Body:
+
+ ```json
+
+{
+    "id": 12,
+    "weight": 30,
+    "exercise_id": 5,
+    "exercise": {
+        "name": "Incline D.B Chest Press"
+    },
+    "reps": 12,
+    "user_id": 1,
+    "sets": 2
+}
+
+```
+
+### `/user/<int:user_id>/<int:id>/`
+ - Method: PUT OR PATCH
+ - Arguments: user_id, id
+ - Description: updates the matched user's exercise 
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & User Only
+ - Response Body:
+
+ ```json
+
+{
+    "exercise": {
+        "name": "pull-up"
+    },
+    "exercise_id": 1,
+    "reps": 10,
+    "weight": 50,
+    "sets": 4,
+    "id": 1,
+    "user_id": 1
+}
+
+```
+
+### `/workouts/delete/user/<int:user_id>/<int:id>/`
+ - Method: DELETE
+ - Arguments: user_id, id
+ - Description: Deletes the matched user's exercise 
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & User Only
+ - Response Body:
+
+ ```json
+
+{
+    "message": "Exercise id 5 deleted successfully"
+}
+
+```
+
+## User stats routes
+
+### `/user-stats/`
+ - Method: GET
+ - Arguments: None
+ - Description: Gets all user statistics
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & Admin Only
+ - Response Body:
+
+ ```json
+
+[
+    {
+        "body_weight": 80,
+        "user_id": 1,
+        "height": 178,
+        "id": 1,
+        "user": {
+            "username": "Adam"
+        }
+    },
+    {
+        "body_weight": 55,
+        "user_id": 2,
+        "height": 162,
+        "id": 2,
+        "user": {
+            "username": "Admin1"
+        }
+    }
+]
+
+```
+
+### `/user-stats/user/<int:user_id>/`
+ - Method: GET
+ - Arguments: None
+ - Description: Gets specific user statistics
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & User Only
+ - Response Body:
+
+ ```json
+
+{
+    "body_weight": 80,
+    "user_id": 1,
+    "height": 178,
+    "id": 1,
+    "user": {
+        "username": "Adam"
+    }
+}
+
+```
+
+### `/user-stats/<int:user_id>/`
+ - Method: DELETE
+ - Arguments: user_id
+ - Description: Deletes specific user_id
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & User Only
+ - Response Body:
+
+ ```json
+
+{
+    "message": "User Stat id 1 deleted successfully"
+}
+
+```
+
+### `/user-stats/user/add-stats/<int:user_id>/`
+ - Method: POST
+ - Arguments: user_id
+ - Description: Adds user stats for a specific user
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & User Only
+ - Response Body:
+
+ ```json
+
+{
+    "body_weight": 75,
+    "user_id": 1,
+    "height": 173,
+    "id": 4,
+    "user": {
+        "username": "Adam"
+    }
+}
+
+```
+
+### `/user-stats/user/<int:user_id>/`
+ - Method: PUT OR PATCH
+ - Arguments: user_id
+ - Description: updates a specific users statistic
+ - Authentication: @jwt_required()
+ - Authorization: Bearer Token & User Only
+ - Response Body:
+
+ ```json
+
+{
+    "body_weight": 90,
+    "user_id": 1,
+    "height": 178,
+    "id": 1,
+    "user": {
+        "username": "Adam"
+    }
+}
+
+```
 
  <hr>
 

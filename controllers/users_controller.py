@@ -88,8 +88,8 @@ def update_user(id):
     user = db.session.scalar(stmt)
     # Checking if user exists with the given id in the route given.
     if user:
-        user.username = data['username'] or user.username
-        user.email = data['email'] or user.email
+        user.username = request.json.get('username') or user.username
+        user.email = request.json.get('email') or user.email
         user.password = user.password or bcrypt.generate_password_hash(request.json.get('password')).decode('utf8')
         db.session.commit()
         return UserSchema(exclude=['password']).dump(user)

@@ -120,6 +120,7 @@ def update_exercise(id):
         return {'error': f'Exercise not found with the given id {id}'}, 404  
 
 @exercises_bp.route('/muscle-group/<int:muscle>/')
+@jwt_required()
 def get_muscle_group(muscle):
     stmt = db.select(Exercise).filter_by(muscle_group_id = muscle)
     muscle_group = db.session.scalars(stmt)

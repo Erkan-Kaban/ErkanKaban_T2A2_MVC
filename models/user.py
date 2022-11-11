@@ -21,12 +21,7 @@ class UserSchema(ma.Schema):
         Length(min=3, error='Username must be at least 5 characters long'),
         Regexp('^[A-zA-Z0-9 ]+$', error='Only letters, numbers and spaces are allowed')
     ))
-    # Email Validator.
-    email = fields.String(required=True, validate=And(
-        Email(error='Email must contain an @'),
-        Regexp('^[A-zA-Z0-9@. ]+$', error='Only letters, numbers and spaces are allowed')
-    ))
-
+   
     class Meta:
         # fields set for dump
         fields = ('id', 'username', 'email', 'password', 'is_admin')
