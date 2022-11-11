@@ -158,6 +158,7 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
     "is_admin": false
 }
 ```
+<hr>
 
 ## Exercise Routes
 ### `/exercises/`
@@ -327,6 +328,7 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
 ]
 
 ```
+<hr>
 
 ## Auth Routes
 ### `/auth/login/`
@@ -346,6 +348,7 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
 }
 
 ```
+<hr>
 
 ## Logged workout routes
 ### `/workouts/`
@@ -485,6 +488,7 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
 }
 
 ```
+<hr>
 
 ## User stats routes
 
@@ -614,10 +618,23 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
 
  ### Requirement 7 Detail any third party services that your app will use
 
- - python-dotenv : This package allows us to run custom configurations through a file named .flaskenv
+ - `python-dotenv` : This package allows us to run custom configurations through a file named .flaskenv
  now we can just do flask run, and gets all the required configuration out of the .flaskenv benefit to this is
  that we can just run flask run in the console.
-<br>
+
+ - `Flask`: A light web application framework, it starts off light but can be scaled up to bigger projects and APIs.
+
+ - `Flask_marshmallow` : A module that deserializes/serializes objects.
+
+ - `Flask_sqlalchemy` : An extension of flask, an ORM that allows to use Python classes and code to translate into SQL.
+
+ - `Flask_bcrypt`: Bcrypt is used for hashing/encoding passwords registered by users.
+
+ - `Flask_jwt_extended`: JWTManager is used to produce tokens for users JSON Web Tokens (JWT), and to get tokens identity.
+
+ - `flask.Blueprint`: Used to create shortcuts for endpoints and to have more organised code.
+
+<hr>
 
  The API created will be using a BMI score calculator from a PyPI service called BMI-Score
 
