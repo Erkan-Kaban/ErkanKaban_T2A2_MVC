@@ -64,10 +64,8 @@ def delete_exercise(id):
 @jwt_required()
 def get_one_exercise(id):
     stmt = db.select(Exercise).filter_by(id=id)
-    print(stmt)
     exercise = db.session.scalar(stmt)
     # Checking if exercise exists with the given id in the route given.
-    # Exclude password also.
     if exercise:
         return ExerciseSchema().dump(exercise)
     else:

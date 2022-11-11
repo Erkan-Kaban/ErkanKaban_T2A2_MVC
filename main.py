@@ -13,6 +13,7 @@ from controllers.auth_controller import auth_bp
 from controllers.cli_controller import db_commands
 from controllers.exercises_controller import exercises_bp
 from controllers.logged_workout_controller import logged_workout_bp
+from controllers.user_stat_controller import user_stats_bp
 
 # Flask will automatically look for create_app and run it.
 def create_app():
@@ -51,5 +52,6 @@ def create_app():
     app.register_blueprint(db_commands)
     app.register_blueprint(exercises_bp)
     app.register_blueprint(logged_workout_bp)
+    app.register_blueprint(user_stats_bp)
 
     return app

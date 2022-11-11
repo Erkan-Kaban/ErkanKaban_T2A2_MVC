@@ -289,7 +289,27 @@ def seed_db():
                 name = 'Calves'
         )
    ]
+
+   # Seeding user stats
+   user_stats = [
+        User_stat(
+            body_weight = 80,
+            height = 178,
+            user_id = 1
+        ),
+        User_stat(
+            body_weight = 55,
+            height = 162,
+            user_id = 2
+        ),
+        User_stat(
+            body_weight = 120,
+            height = 170,
+            user_id = 3
+        )
+    ]
    # session is the current session with the database 
+   db.session.add_all(user_stats)
    db.session.add_all(logged_work)
    db.session.add_all(users)
    db.session.add_all(muscle_groups)
