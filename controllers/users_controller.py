@@ -80,14 +80,16 @@ def delete_user(id):
 @users_bp.route('/<int:id>/', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_user(id):
+    # Create a new User model instance used to validation.
+    data = UserSchema().load(request.json)
     # Authorization checks if the user trying to change details is the user itself.
     authorize_user(id)
     stmt = db.select(User).filter_by(id=id)
     user = db.session.scalar(stmt)
     # Checking if user exists with the given id in the route given.
     if user:
-        user.username = request.json.get('username') or user.username
-        user.email = request.json.get('email') or user.email
+        user.username = data['username'] or user.username
+        user.email = data['email'] or user.email
         user.password = user.password or bcrypt.generate_password_hash(request.json.get('password')).decode('utf8')
         db.session.commit()
         return UserSchema(exclude=['password']).dump(user)
@@ -99,12 +101,13 @@ def update_user(id):
 @users_bp.route('/register/', methods=['POST'])
 def create_user():
     # Create a new User model instance
+    data = UserSchema().load(request.json)
     try:
         # We are sending the request through json format else it won't be sent any other way.
         # We can increase security by ensuring we use POST method and json body only. This prevents any SQL injection
         user = User(
-            username = request.json['username'],
-            email = request.json['email'],
+            username = data['username'],
+            email = data['email'],
             password = bcrypt.generate_password_hash(request.json['password']).decode('utf8'),
         )    
         # Add and commit user to DB

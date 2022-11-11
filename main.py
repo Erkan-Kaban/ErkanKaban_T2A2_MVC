@@ -7,6 +7,9 @@ from init import db, ma, bcrypt, jwt
 # For use for app.config to use our .env file to configuration.
 import os
 
+# Importing validation error from marshmallow
+from marshmallow.exceptions import ValidationError
+
 # Importing blueprint from controllers
 from controllers.users_controller import users_bp
 from controllers.auth_controller import auth_bp
@@ -14,11 +17,33 @@ from controllers.cli_controller import db_commands
 from controllers.exercises_controller import exercises_bp
 from controllers.logged_workout_controller import logged_workout_bp
 from controllers.user_stat_controller import user_stats_bp
+from sqlalchemy.exc import DataError 
 
 # Flask will automatically look for create_app and run it.
 def create_app():
     # Creating an instance of Flask and calling the variable name 'app'.
     app = Flask(__name__)
+    
+    # Catches any validation errors.
+    @app.errorhandler(ValidationError)
+    def validation_error(err):
+        # catch the error 400 a return the html error in JSON format.
+        return {'error': err.messages}, 400
+
+    @app.errorhandler(TypeError)
+    def type_error(err):
+        return {'error': err}, 400
+
+    @app.errorhandler(DataError)
+    def data_error(err):
+        # catch the error 400 a return the html error in JSON format.
+        return {'error': err}, 400
+
+    # Catches any empty inputs
+    @app.errorhandler(400)
+    def bad_request(err):
+        # catch the error 400 a return the html error in JSON format.
+        return {'error': str(err)}, 400
 
     # A global error catcher for our entire app. Used here for DRY code, rather than adding in individual controllers. 
     @app.errorhandler(404)
@@ -26,9 +51,16 @@ def create_app():
         # catch the error 404 a return the html error in JSON format.
         return {'error': str(err)}, 404
 
+    # Handles any unauthorized errors.
     @app.errorhandler(401)
     def unauthorized(err):
+        # catch the error 401 a return the html error in JSON format.
         return {'error': str(err)}, 401
+
+    # Handles any key errors.
+    @app.errorhandler(KeyError)
+    def key_error(err):
+        return {'error': f'The field {err} is required.'}, 400
 
     # flask automatically sorts our columns in alphabetical order
     # To get the order we want specified in our schemas we need to do the following to the config

@@ -1,4 +1,6 @@
 from init import db, ma
+from marshmallow import fields
+from marshmallow.validate import Length, Regexp, And, Email
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -12,7 +14,21 @@ class User(db.Model):
     logged_workouts = db.relationship('Logged_workout', back_populates='users', cascade='all, delete')
 
 class UserSchema(ma.Schema):
+    # Validations.
+    # Checking if username is a minimum of 6 characters.
+    # Checking regexp are regular expressions we are allowed to use for username.
+    username = fields.String(required=True, validate=And(
+        Length(min=3, error='Username must be at least 5 characters long'),
+        Regexp('^[A-zA-Z0-9 ]+$', error='Only letters, numbers and spaces are allowed')
+    ))
+    # Email Validator.
+    email = fields.String(required=True, validate=And(
+        Email(error='Email must contain an @'),
+        Regexp('^[A-zA-Z0-9@. ]+$', error='Only letters, numbers and spaces are allowed')
+    ))
+
     class Meta:
+        # fields set for dump
         fields = ('id', 'username', 'email', 'password', 'is_admin')
         # In addition to the flask config order, we also need to specify the following
         ordered = True

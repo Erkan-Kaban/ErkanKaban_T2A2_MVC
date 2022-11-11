@@ -89,14 +89,16 @@ def create_exercise(user_id):
             weight = request.json['weight'],
             user_id = user_id,
             exercise_id = request.json['exercise_id']
-        )    
+        )  
         # Add and commit exercise to DB
         db.session.add(logged_workout)
         db.session.commit()
         # Respond to client excluding the password from the client
         return Logged_workoutSchema().dump(logged_workout), 201
     except IntegrityError:
-        return {"error" : "exercise already created"}, 409 
+        return {"error" : "exercise already created"}, 409
+    except TypeError:
+        return {"error": "Please enter an integer"}, 400 
 
 # Creating a route to delete a logged workout from the database.
 @logged_workout_bp.route('/delete/user/<int:user_id>/<int:id>', methods=['DELETE'])

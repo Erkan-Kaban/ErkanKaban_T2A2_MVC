@@ -85,9 +85,9 @@ def create_user_stat(user_id):
         # We are sending the request through json format else it won't be sent any other way.
         # We can increase security by ensuring we use POST method and json body only. This prevents any SQL injection
         user_stat = User_stat(
-            body_weight = request.json['body_weight'],
-            height = request.json['height'],
-            user_id = user_id
+        body_weight = request.json['body_weight'],
+        height = request.json['height'],
+        user_id = user_id
         )    
         # Add and commit user_stat to DB
         db.session.add(user_stat)

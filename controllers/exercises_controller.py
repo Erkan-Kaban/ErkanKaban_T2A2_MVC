@@ -76,6 +76,8 @@ def get_one_exercise(id):
 @exercises_bp.route('/add-workout/', methods=['POST'])
 @jwt_required()
 def create_exercise():
+    # Create a new User model instance
+    data = ExerciseSchema().load(request.json)
     # Authorization added so only admins can create workouts to library.
     authorize()
     # Create a new Exercise model instance
@@ -83,9 +85,9 @@ def create_exercise():
         # We are sending the request through json format else it won't be sent any other way.
         # We can increase security by ensuring we use POST method and json body only. This prevents any SQL injection
         exercise = Exercise(
-            name = request.json['name'],
-            muscle_group_id = request.json['muscle_group_id'],
-            exercise_equipment_id = request.json['exercise_equipment_id']
+            name = data['name'],
+            muscle_group_id = data['muscle_group_id'],
+            exercise_equipment_id = data['exercise_equipment_id']
         )    
         # Add and commit exercise to DB
         db.session.add(exercise)
@@ -93,22 +95,24 @@ def create_exercise():
         # Respond to client excluding the password from the client
         return ExerciseSchema().dump(exercise), 201
     except IntegrityError:
-        return {"error" : "exercise already created"}, 409
+        return {"error" : "exercise already created or requires a valid exercise id."}, 409
 
 
 # Updating the inputted exercise with PUT or PATCH methods.
 @exercises_bp.route('/<int:id>/', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_exercise(id):
+    # Create a new User model instance
+    data = ExerciseSchema().load(request.json)
     # Authorization checks if exercise is admin.
     authorize()
     stmt = db.select(Exercise).filter_by(id=id)
     exercise = db.session.scalar(stmt)
     # Checking if exercise exists with the given id in the route given.
     if exercise:
-        exercise.name = request.json.get('name') or exercise.name
-        exercise.muscle_group_id = request.json.get('muscle_group_id') or exercise.muscle_group_id
-        exercise.exercise_equipment_id = request.json.get('exercise_equipment_id') or exercise.exercise_equipment_id
+        exercise.name = data['name'] or exercise.name
+        exercise.muscle_group_id = data['muscle_group_id'] or exercise.muscle_group_id
+        exercise.exercise_equipment_id = data['exercise_equipment_id'] or exercise.exercise_equipment_id
         
         db.session.commit()
         return ExerciseSchema().dump(exercise)

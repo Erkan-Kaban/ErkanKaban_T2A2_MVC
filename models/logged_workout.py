@@ -2,6 +2,7 @@
 from init import db, ma
 from marshmallow import fields
 
+
 # Created the logged workout model with its corresponding columns.
 class Logged_workout(db.Model):
     __tablename__ = 'logged_workouts'
@@ -23,9 +24,8 @@ class Logged_workout(db.Model):
 
 # Created the coresponding schema for the logged_workout model.
 class Logged_workoutSchema(ma.Schema):
-    # created a nested schema that contains the name of the exercise in a logged workout.
+    
     exercise = fields.Nested('ExerciseSchema', only=['name'])
 
-   
     class Meta:
         fields = ('id', 'sets', 'reps', 'weight', 'user_id', 'exercise_id', 'exercise')
