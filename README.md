@@ -3,6 +3,28 @@
 1. [Link to Trello Board](https://trello.com/b/eeVsQVj6/api-web-server-project)
 2. [Github](https://github.com/Erkan-Kaban)
 
+## How to setup API
+
+1. Git clone the github repository.
+2. Create a virtual environment inside the cloned repository.
+3. Go into the virtual environment.
+4. type in the command terminal `pip install -r requirements.txt`
+5. Rename .env.sample to .env.
+6. Create a psql database.
+7. inside env enter your secret jwt key and setup your database url.
+8. Run the commands `flask db create && flask db seed`
+9. In the terminal `flask run` to activate flask.
+10. Look up the readme or under /controllers for the routes.
+11. Send requests through postman.
+
+## Structure of API
+
+- Replicates MVC model, which models in a /models directory, controllers in /controllers directory.
+
+ - main.py - contains all the blue prints of all the controllers and the actual runnning of flask, also error handlers, as well as setup config and initialization of sqlalchemy and other modules.
+
+- init.py - contains all the shared modules from several other modules, this was created to avoid any circulation of imports issue.
+
 ## Requirement 1 Identify the problem we are trying to solve by building this app.
 
 <hr>
@@ -50,7 +72,7 @@ For the reasons above, mainly that Postgreql is highly flexible and is easy to i
 
 <hr>
 
-### Requirement 4 Identify and discuss the key functionalities and benefits of an ORM
+## Requirement 4 Identify and discuss the key functionalities and benefits of an ORM
 <br>
 
 #### <u>Key Functionality</u>
@@ -72,7 +94,7 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
 
  <hr>
 
- ### Requirement 5 Document all endpoints for your API
+ ## Requirement 5 Document all endpoints for your API
 
 ## User routes:
 ### `/users/`
@@ -622,7 +644,7 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
 
  <hr>
 
- ### Requirement 7 Detail any third party services that your app will use
+ ## Requirement 7 Detail any third party services that your app will use
 
  - `python-dotenv` : This package allows us to run custom configurations through a file named .flaskenv
  now we can just do flask run, and gets all the required configuration out of the .flaskenv benefit to this is
@@ -816,7 +838,7 @@ user - a nested schema that lists out the username that the user stat is tied wi
 
 <hr>
 
- ### Requirement 9 Discuss the database relations to be implemented in your application
+ ## Requirement 9 Discuss the database relations to be implemented in your application
 
  ### <u>One (and only one) to many:</u>
 <Br>
@@ -855,7 +877,7 @@ Logged workouts essentially works as a joining table between the exercises and u
 
  <hr>
 
- ### Requirement 10 Describe the way tasks are allocated and tracked in your project
+ ## Requirement 10 Describe the way tasks are allocated and tracked in your project
 
 Link to my Trello Board [API TRELLO BOARD](https://trello.com/b/eeVsQVj6/api-web-server-project)
 
