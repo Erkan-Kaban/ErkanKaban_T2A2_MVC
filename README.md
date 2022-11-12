@@ -1,7 +1,7 @@
 # T2A2 - Benchpress This API Project :muscle:
 
 1. [Link to Trello Board](https://trello.com/b/eeVsQVj6/api-web-server-project)
-2. [Github](https://github.com/Erkan-Kaban)
+2. [Github](https://github.com/Erkan-Kaban/ErkanKaban_T2A2_MVC)
 
 ## How to setup API
 
