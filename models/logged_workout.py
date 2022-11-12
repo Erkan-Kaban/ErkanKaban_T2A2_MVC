@@ -25,6 +25,7 @@ class Logged_workout(db.Model):
 # Created the coresponding schema for the logged_workout model.
 class Logged_workoutSchema(ma.Schema):
     
+    # Nesting name from exercise, to get the name of the exercise in the JSON.
     exercise = fields.Nested('ExerciseSchema', only=['name'])
 
     class Meta:

@@ -449,9 +449,9 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
 
 ```
 
-### `/user/<int:user_id>/<int:id>/`
+### `/user/<int:user_id>/exercise/<int:exercise_id>`
  - Method: PUT OR PATCH
- - Arguments: user_id, id
+ - Arguments: user_id, exercise_id
  - Description: updates the matched user's exercise 
  - Authentication: @jwt_required()
  - Authorization: Bearer Token & User Only
@@ -473,9 +473,9 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
 
 ```
 
-### `/workouts/delete/user/<int:user_id>/<int:id>/`
+### `/workouts/delete/user/<int:user_id>/exercise/<int:exercise_id>/`
  - Method: DELETE
- - Arguments: user_id, id
+ - Arguments: user_id, exercise_id
  - Description: Deletes the matched user's exercise 
  - Authentication: @jwt_required()
  - Authorization: Bearer Token & User Only
@@ -640,36 +640,212 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
 
  ### Requirement 8 Describe your projects models in terms of the relationships they have with each other
 
-### One (and only one) to many from the following two models to exercises model:
- - MUSCLE_GROUPS(id, name)
- - EXERCISE_EQUIPMENT(id, name)
+ 
 
-    - With these two models, we have one and only one-to-many relationships with the exercises model. Therefore, each muscle group and exercise equipment used will be listed in the exercise entity many times and only once from each muscle group and exercise equipment in every instance. This way we can easily identify the equipment used and muscle groups for each exercise listed in exercises.
+## <u>Exercise Equipment Model</u>
 
-### Zero or one to one or many from exercises to user_workout_template model:
-- USER_WORKOUT_TEMPLATE(id, exercise_ID, user_ID)
-    - We have the option to add an exercise. Once we have decided to add a list of exercises to our user_workout_template, the id from exercises can appear one or many times in the template model.
+### <u>Attributes</u>
+- id (Integer, Primary Key=True)
+- name (String(100), nullable=False)
 
-### One (and only one) from users to user_workout_template model:
--   USERS(id, f_name, l_name, email, password, is_admin) 
-    - One and only one user is sent out to our worker template so we can pair up the user with he/she work out template. 
+### <u>Relationships</u>
 
-### Zero or one to Zero or one relationship between users and user_stats model:  
--   USER_STATS(id, body_weight, height, BMI, user_ID)
-    - With this relationship we have both ends as optional for user and user stats relationship to be created. I made it optional for the user rather than mandatory as it's more user friendly if they didn't feel like they didn't need to input their personal details.
+- exercise - We are able to have the exercise equipment id/name information with the exercise model with a tied in foreign key. 
 
-### One to many relationship between user_workout_template and user_workout_log_history:
-- USER_WORKOUT_LOG_HISTORY(user_template_id_logged_workout_id, user_workout_template_id, logged_id, date_logged)
-    - Once a user creates a workout template, we want to have one instance sent to a join table user_workout_log_history that could save many templates, so that is why there are many relationships on that end of the model.
+### <u>Exercise Equipment Schema</u>
 
-### Zero or many to one (and only one) relationship between user_workout_log_history and logged_workout
-- LOGGED_WORKOUT(id, sets, reps, weight, calories_burnt)
- - Once the user has logged a workout template I wanted this information to be tied in with the join table. a logged workout would be only one but can result and show many times in a log history of workouts.
- <hr>
+### <u>Fields listed</u>
+- id 
+- name 
+
+<hr>
+
+## <u>Muscle Group Model</u>
+
+### <u>Attributes</u>
+- id (Integer, Primary Key=True)
+- name (String(100), nullable=False)
+
+### <u>Relationships</u>
+
+- exercise - We are able to have the muscle group id/name information with the exercise model with a tied in foreign key. 
+
+### <u>Exercise Equipment Schema</u>
+
+### <u>Fields listed</u>
+- id 
+- name 
+<hr>
+
+## <u>Exercise Model</u>
+
+### <u>Attributes</u>
+- id (Integer, Primary Key=True)
+- name (String(100), nullable=False)
+
+### <u>Foreign Keys</u>
+- muscle_group_id(Integer, Foreign Key, NOT NULLABLE) - linked to the muscle group model using the muscle_group_id given to exercise model.
+
+- exercise_equipment_id(Integer, Foreign Key, NOT NULLABLE) - linked to exercise equipment model using the exercise_quipment_id given to exercise model.
+
+### <u>Relationships</u>
+
+- muscle_group - This allows us to list out what muscle group for each exercise listed.
+- exercise_equipment - This allows us to list out what exercise equipment used for each exercise listed.
+- logged_workout - The information from exercises is able to be relayed onto the logged work out entity with a primary key from the exercise model.
+
+## <u>Exercise Model Schema</u>
+
+### <u>Fields listed</u>
+- id 
+- name
+- muscle_group_id
+- muscle_group
+- exercise_equipment_id
+- exercise_equipment
+
+### <u>Linked Schemas</u>
+- muscle_group - a nested schema is used in exercises so that every corresponding foreign key from muscle group entity can list out the muscle name.
+- exercise_equipment - Same as above this time we are listing out coresponding foreign key from exercise equipment entity to list out the exercise equipments name.
+
+### <u>Schema Validation</u>
+- The 'name' validation ensures the length of the exercise name is at least 5 characters long, and has certain characters listed.
+- The muscle group foreign key entered in is a valid id number being placed into muscle grop entry.
+- The exercise equipment foreign key entered in is a valid id number being placed into the exercise equipment entry.
+
+<hr>
+
+## <u>Logged_Workout Model</u>
+
+### <u>Attributes</u>
+- id (Integer, Primary Key=True)
+- sets (Integer, nullable=False)
+- reps (Integer, nullable=False)
+- weight (Integer, nullable=False)
+
+### <u>Foreign Keys</u>
+- user_id(Integer, Foreign Key, NOT NULLABLE) - linked to the user model using the user_id primary key given to Logged_workout model as a foreign key.
+
+- exercise_id(Integer, Foreign Key, NOT NULLABLE) - linked to exercise model using the exercise_id primary key given to Logged_workout model as a foreign key.
+
+### <u>Relationships</u>
+
+- exercise - This allows us to list out the exercise we have selected for logged workouts. 
+- users - This allows us to tie up what users have selected what exercise.
+
+## <u>Logged_workout Schema</u>
+
+### <u>Fields listed</u>
+- id 
+- sets
+- reps
+- weight
+- user_id
+- exercise_id
+- exercise
+
+### <u>Linked Schemas</u>
+- exercise - a nested schema is used in exercises so that every corresponding foreign key from muscle group entity can list out the muscle name.
+
+<hr>
+
+## <u>User Model</u>
+
+### <u>Attributes</u>
+- id (Integer, Primary Key=True)
+- username (Integer, nullable=False)
+- email (Integer, nullable=False, unique=True)
+- password (String, nullable=False)
+- is_admin (Boolean, default=False)
+
+### <u>Foreign Keys</u>
+None
+
+### <u>Relationships</u>
+
+- logged_workout - This allows us to list out the users we have selected that have 'logged' a workouts 
+- users_stats - A user stat for each user created, ensuring only one user has one matching user stat each.
+
+## <u>User Schema</u>
+
+### <u>Fields listed</u>
+- id 
+- username
+- email
+- password
+- is_admin
+
+### <u>Linked Schemas</u>
+None
+
+## <u>User Stat Model</u>
+
+### <u>Attributes</u>
+- id (Integer, Primary Key=True)
+- body_weight (Integer, nullable=False)
+- height (Integer, nullable=False)
+
+### <u>Foreign Keys</u>
+- user_id(Integer, Foreign Key, NOT NULLABLE) - linked to the user model using the user_id primary key given to Logged_workout model as a foreign key.
+
+### <u>Relationships</u>
+
+- user - This allows us to list out the users we that have user stats added. 
+
+## <u>User Schema</u>
+
+### <u>Fields listed</u>
+- id 
+- body_weight
+- height
+- user_id
+- user
+
+### <u>Linked Schemas</u>
+user - a nested schema that lists out the username that the user stat is tied with inside the user stat model.
+
+### <u>Schema Validation</u>
+- The 'body weight' validation ensures the range of the body weight is an integer and is between 2 and 400.
+- The 'height' validation ensures that the range of height is between 120 and 250.
+
+<hr>
 
  ### Requirement 9 Discuss the database relations to be implemented in your application
 
- -
+ ### <u>One (and only one) to many:</u>
+<Br>
+
+ - MUSCLE_GROUPS(id, name) `1 --> many` EXERCISES(id, name, muscle_group_ID, exercise_equipment_ID)
+
+    - The relationship between these two models, we have one and only(muscle_groups) to many relationships(exercises). Each exercise seeded into the exercises table will contain a specific muscle_group_ID foreign key that lines up with the name of the exercise. 
+<br><br>
+
+ - EXERCISE_EQUIPMENTS(id, name) `1 --> many` EXERCISES(id, name, muscle_group_ID)
+
+    - The relationship between exercise_equipments and exercises have a very similar relationship as the one above. Listing the type of exercise_equipment as a foreign key and tying its name to each exercise.
+
+By having this relationship we are able to list out easily with id we want each exercise containing what exercise equipment is to be used and what muscle group it is going to have an effect on. We can also list out the names from outside each muscle group id and exercise equipment for readability.
+
+- USERS(id, username, email, password, is_admin) `1 --> many` LOGGED_WORKOUTS(id, sets, reps, weight, user_id, exercise_id)
+
+    - We have one of each user with their corresponding primary key having a relationship with the logged_workout table via foreign key, this way we are about to tie each user with what sets, reps and weight they've inputted into their workout.
+
+- EXERCISES(id, name, muscle_group_ID, exercise_equipment_ID) `1 --> many` LOGGED_WORKOUTS(id, sets, reps, weight, user_id, exercise_id)
+
+    - On the other side of the coin we have each exercise primary key having a relationship with the logged_workout table via foreign key, this way we are about to tie in the actualy exercise id and be able to identify what exercise the user has chosen to add there workouts.
+
+Logged workouts essentially works as a joining table between the exercises and users, it is also used to list out what each user has listed as there exercise and corresponding sets, reps, weight.
+
+<br>
+
+### <u>Zero or one to Zero or one:</u>
+<br>
+
+-   USERS(id, username, email, password, is_admin) `Zero or one ---> Zero or one` 
+ USER_STATS(id, body_weight, height, BMI, user_ID)
+
+    - With this relationship we have both ends as optional for user and user stats relationship to be created. I made it optional for the user rather than mandatory as it's more user friendly if they didn't feel like they didn't need to input their personal details. The way it's tied in is with the user primary key from users table, we are able to tie in a foreign key into user_stats to diffrentiate between users statistics.
+
 
  <hr>
 

@@ -26,7 +26,7 @@ bcrypt = Bcrypt()
 # Blue print of users statistics with a url prefix of /user-stats
 user_stats_bp = Blueprint('user_stats', __name__, url_prefix='/user-stats')
 
-# route users lists all the exercises json, attached route to exercises_bp blueprint.
+# route users lists all the user_stat json, attached route to user_stats_bp blueprint.
 @user_stats_bp.route('/')
 # Checking if user has a bearer JWT token and hasn't expired.
 @jwt_required()
@@ -109,7 +109,7 @@ def create_user_stat(user_id):
         return {"error" : "user_stat already created"}, 409
 
 
-# Updating the inputted exercise with PUT or PATCH methods.
+# Updating the inputted user id with PUT or PATCH methods.
 @user_stats_bp.route('user/<int:user_id>/', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_user_stat(user_id):
@@ -117,7 +117,7 @@ def update_user_stat(user_id):
     authorize_user(user_id)
     stmt = db.select(User_stat).filter_by(user_id=user_id)
     user_stat = db.session.scalar(stmt)
-    # Checking if exercise exists with the given id in the route given.
+    # Checking if user_stat exists with the given id in the route given.
     if user_stat:
         user_stat.body_weight = request.json.get('body_weight') or user_stat.body_weight
         user_stat.height = request.json.get('height') or user_stat.height

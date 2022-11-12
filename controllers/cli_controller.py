@@ -1,6 +1,5 @@
 from flask import Blueprint
 from init import db, bcrypt
-# from datetime import date
 from models.logged_workout import Logged_workout
 from models.user import User
 from models.exercise import Exercise

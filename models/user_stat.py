@@ -15,7 +15,7 @@ class User_stat(db.Model):
     # Foreign key.
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
 
-    # relationship one to one with user.
+    # Relationship one to one with user.
     user = db.relationship('User', backref=backref('user_stat', uselist=False))
 
 class User_statSchema(ma.Schema):

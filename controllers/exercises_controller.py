@@ -113,7 +113,6 @@ def update_exercise(id):
         exercise.name = data['name'] or exercise.name
         exercise.muscle_group_id = data['muscle_group_id'] or exercise.muscle_group_id
         exercise.exercise_equipment_id = data['exercise_equipment_id'] or exercise.exercise_equipment_id
-        
         db.session.commit()
         return ExerciseSchema().dump(exercise)
     else:

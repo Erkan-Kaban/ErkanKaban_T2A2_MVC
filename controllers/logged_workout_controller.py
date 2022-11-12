@@ -56,12 +56,12 @@ def get_user_workout(user_id):
     return Logged_workoutSchema(many=True).dump(logged_workout)
 
 # Updating the user id's exercise with PUT or PATCH methods.
-@logged_workout_bp.route('user/<int:user_id>/<int:id>', methods=['PUT', 'PATCH'])
+@logged_workout_bp.route('user/<int:user_id>/exercise/<int:exercise_id>', methods=['PUT', 'PATCH'])
 @jwt_required()
-def update_user_workout(user_id, id):
+def update_user_workout(user_id, exercise_id):
     # Authorize user checking if it's the matching user
     authorize_user(user_id)
-    stmt = db.select(Logged_workout).filter_by(id=id)
+    stmt = db.select(Logged_workout).filter_by(id=exercise_id)
     user = db.session.scalar(stmt)
     # Checking if user exists with the given id in the route given.
     if user:
@@ -71,7 +71,7 @@ def update_user_workout(user_id, id):
         db.session.commit()
         return Logged_workoutSchema().dump(user)
     else:
-        return {'error': f'Exercise not found with the given id {id}'}, 404
+        return {'error': f'Exercise not found with the given id {exercise_id}'}, 404
 
 # POST creation of a workout for a specific user.
 @logged_workout_bp.route('/add/user/<int:user_id>/', methods=['POST'])
@@ -101,14 +101,14 @@ def create_exercise(user_id):
         return {"error": "Please enter an integer"}, 400 
 
 # Creating a route to delete a logged workout from the database.
-@logged_workout_bp.route('/delete/user/<int:user_id>/<int:id>', methods=['DELETE'])
+@logged_workout_bp.route('/delete/user/<int:user_id>/exercise/<int:exercise_id>', methods=['DELETE'])
 # Checking for sign in token.
 @jwt_required()
-def delete_exercise(user_id, id):
+def delete_exercise(user_id, exercise_id):
     # Authorize user checking if it's the matching user
     authorize_user(user_id)
     # Creating statement to check Exercise model for the id put into endpoint.
-    stmt = db.select(Logged_workout).filter_by(id=id)
+    stmt = db.select(Logged_workout).filter_by(id=exercise_id)
     # Placing statement into database to look for a single object and storing it in exercise.
     workout = db.session.scalar(stmt)
     # Checking if exercise exists with the given id in the route given.
@@ -117,4 +117,4 @@ def delete_exercise(user_id, id):
         db.session.commit()
         return {'message': f'Exercise id {workout.exercise_id} deleted successfully'}
     else:
-        return {'error': f'Exercise not found with the given id {id}'}, 404
+        return {'error': f'Exercise not found with the given id {exercise_id}'}, 404
