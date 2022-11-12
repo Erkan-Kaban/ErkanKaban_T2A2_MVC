@@ -27,7 +27,7 @@ class ExerciseSchema(ma.Schema):
     # Checking if workout name is at least 5 characters long
     # checking regexp are regular expressions we are allowed to use.
     name = fields.String(required=True, validate=And(
-        Length(min=5, error='Username must be at least 5 characters long'),
+        Length(min=5, error='Exercise must be at least 5 characters long'),
         Regexp('^[A-zA-Z0-9- ]+$', error='Only letters, numbers and spaces are allowed')
     ))
     # Checking range error for possible muscle group id and exercise equipment id.
