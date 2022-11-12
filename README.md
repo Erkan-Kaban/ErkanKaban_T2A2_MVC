@@ -634,6 +634,8 @@ Object Relational Mapping(ORM) is a layer between the choice of programming lang
 
  - `flask.Blueprint`: Used to create shortcuts for endpoints and to have more organised code.
 
+ - `PostgresQL`: An open source database system.
+
  <hr>
 
  ### Requirement 8 Describe your projects models in terms of the relationships they have with each other

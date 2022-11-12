@@ -80,13 +80,22 @@ def get_one_userstat(user_id):
 def create_user_stat(user_id):
     # Authorization added so only user can delete.
     authorize_user(user_id)
+
+    # We are checking if the user already exists, as each user id is supposed to only have one set
+    # of statistics.
+    stmt = db.select(User_stat).filter_by(user_id=user_id)
+    user_stat = db.session.scalar(stmt)
+    if user_stat:
+        return {'error': 'user stat already exists'}
+        
     # Create a new user_stat model instance
+    data = User_statSchema().load(request.json)
     try:
         # We are sending the request through json format else it won't be sent any other way.
         # We can increase security by ensuring we use POST method and json body only. This prevents any SQL injection
         user_stat = User_stat(
-        body_weight = request.json['body_weight'],
-        height = request.json['height'],
+        body_weight = data['body_weight'],
+        height = data['height'],
         user_id = user_id
         )    
         # Add and commit user_stat to DB
@@ -95,6 +104,8 @@ def create_user_stat(user_id):
         # Respond to client excluding the password from the client
         return User_statSchema().dump(user_stat), 201
     except IntegrityError:
+        return {"error" : "user_stat already created"}, 409
+    except TypeError:
         return {"error" : "user_stat already created"}, 409
 
 

@@ -26,6 +26,7 @@ bcrypt = Bcrypt()
 # Blue print of users with a url prefix of /users/
 users_bp = Blueprint('users', __name__, url_prefix='/users')
 
+
 # route users lists all the users json, attached route to users_bp blueprint.
 @users_bp.route('/')
 # Checking if user has a bearer JWT token and hasn't expired.
@@ -80,15 +81,15 @@ def delete_user(id):
 @users_bp.route('/<int:id>/', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_user(id):
-    # Create a new User model instance used to validation.
-    data = UserSchema().load(request.json)
     # Authorization checks if the user trying to change details is the user itself.
     authorize_user(id)
     stmt = db.select(User).filter_by(id=id)
     user = db.session.scalar(stmt)
     # Checking if user exists with the given id in the route given.
+    # Create a new User model instance
+    data = UserSchema().load(request.json)
     if user:
-        user.username = request.json.get('username') or user.username
+        user.username = data['username'] or user.username
         user.email = request.json.get('email') or user.email
         user.password = user.password or bcrypt.generate_password_hash(request.json.get('password')).decode('utf8')
         db.session.commit()
