@@ -18,6 +18,12 @@ The app solves the problems by aiding in figuring out and planning what exercise
 
 It's a problem that needs solving because many people are just beginning and need clarification about where to start their fitness journey and require knowledge on what to do at the gym. So by helping them do this, we want to encourage them to begin attending a gym and start to help them improve their health and well-being by supporting this app we are creating.
 
+By also creating this API we make the data for clients very convenient and easy to access from their devices rather than writing it on a bit of paper.
+
+Users can also keep track of their progress in fitness easily again without having to worry about writing it down by hand, they can save there workouts and log it accordingly.
+
+Without this API there wouldn't be as much accountability, without the information as easily tracked or looked at would be alot more of a slog for people to gain motivation to workout and chase their fitness goals.
+
 <hr>
 
 ## Requirement 3 Why have you chosen this database system. What are the drawbacks compared to others?
@@ -850,6 +856,8 @@ Logged workouts essentially works as a joining table between the exercises and u
  <hr>
 
  ### Requirement 10 Describe the way tasks are allocated and tracked in your project
+
+Link to my Trello Board [API TRELLO BOARD](https://trello.com/b/eeVsQVj6/api-web-server-project)
 
  The tasks are allocated and tracked in my project by the use of the Trello board. I split the project into stages:
 
